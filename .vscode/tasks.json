@@ -1,0 +1,30 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build MatchUp",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-o", "build/matchup_gui.exe",          // Output executable in build directory
+                "src/matchup_gui.c",                    // Source file
+                "-I", "C:/msys64/mingw64/include",      // Include directory for headers
+                "-I", "C:/msys64/mingw64/include/gtk-3.0",
+                "-I", "C:/msys64/mingw64/include/pango-1.0",
+                "-I", "C:/msys64/mingw64/include/cairo",
+                "-L", "C:/msys64/mingw64/lib",          // Library directory
+                "-L", "C:/msys64/mingw64/lib/gtk-3.0",
+                "-L", "C:/msys64/mingw64/lib/pango-1.0",
+                "-L", "C:/msys64/mingw64/lib/cairo",
+                "-lgtk-3", "-lgdk-3", "-lpango-1.0", "-lcairo", "-lgobject-2.0", "-lglib-2.0", "-lgio-2.0", 
+                "-static"                                // Static linking flag
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Compiles the MatchUp program using GCC"
+        }
+    ]
+}
