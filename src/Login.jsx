@@ -8,12 +8,12 @@ export default function Login() {
 function TryLogin(){
   const API_URL = "http://4.237.58.241:3000/user/login";
   const [usrData, setusrData] = useState([]);
-  const [email, setEmail] = useState("");
+  const [Username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [clicked, setClicked] = useState(false);
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
   };
 
   const handlePasswordChange = (event) => {
@@ -34,7 +34,7 @@ function TryLogin(){
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ Username, password })
           });
           const data = await res.json();
 
@@ -57,7 +57,7 @@ function TryLogin(){
         window.alert('An error occured')
       }
       fetchData();
-    }, [clicked, email, password]);
+    }, [clicked, username, password]);
 
     localStorage.setItem("token", usrData.token);
     localStorage.setItem("token_type", usrData.token_type);
@@ -67,9 +67,9 @@ function TryLogin(){
       <div>
         <input
           type="text"
-          placeholder="Enter your email"
-          value={email}
-          onChange={handleEmailChange}
+          placeholder="Enter your username"
+          value={username}
+          onChange={handleUsernameChange}
           style={{ width: '300px', height: '80px', fontSize: '25px', marginBottom: '10px' }}
         />
         <input
@@ -88,7 +88,7 @@ function TryLogin(){
             <p style={{ color: 'red' }}>Error: {usrData.message}</p>
           ) : (
             <div>
-              <p>Please enter your email and password to login in!</p>
+              <p>Please enter your username and password to login in!</p>
             </div>
           )}
           {usrData.token ? (
