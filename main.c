@@ -14,6 +14,9 @@ void login(User users[], int userCount);
 typedef struct {
     char username[MAX_LENGTH];
     char password[MAX_LENGTH];
+    char email[MAX_LENGTH];
+    char first_name[MAX_LENGTH];
+    char last_name[MAX_LENGTH];
 } User;
     //login or create profile
     
@@ -49,9 +52,9 @@ int main() {
 
   //will be removed once hashing/login is added by Kailen
   User users[MAX_USERS] = {
-      {"messycactus", "password1"},
-      {"bob", "password2"},
-      {"jenny", "password3"}
+      {"messycactus", "password1", "email@email.com", "megan", "stone"},
+      {"bob", "password2", "email2@email.com", "bob", "thebuilder"},
+      {"jenny", "password3", "email3@email.com", "jenny", "fromtheblock"}
   };
   int userCount = 3;
   //will be removed 
@@ -96,4 +99,55 @@ void displaytitle(void) {
     printf("\t2. Login");
     printf("\t3. Exit");
     printf("\n");
+}
+
+int checkUser(char* username, char* email) {
+  int search = 50; 
+  for (int i = 0; i < MAX_USERS; i++) {
+      if (newuser.username == search ) {
+          return 1;
+      }
+      if (newuser.email == search) {
+          return 2;
+      }
+      return 0; 
+      }
+  }
+
+void createAccount(userCount) {
+  User newuser;
+  int check;
+
+  if (userCount >= MAX_USERS) {
+    printf("\tSorry, the maximum user allowance has been reached. You cannot create a new account.\n");
+    return;
+  }
+
+  printf("\tEnter your username: \n");
+  scanf("%s", newuser.username);
+
+  check = checkUser(newuser.username, NULL);
+  if (check == 1) {
+      printf("This username already exists. Please log in with your username and password or try a different username.\n");
+      return;
+  }
+
+  printf("\tEnter your password: \n");
+  scanf("%s", newuser.password);
+
+  printf("\tEnter your email address: \n");
+  scanf("%s", newuser.email);
+  check = checkUser(NULL, newuser.email);
+  if (check == 2) {
+    printf("There is an account already associated with this email. Please use your username and password to login or use a different email.\n");
+    return; 
+  }
+
+  printf("\tEnter your first name: \n");
+  scanf("%s", newuser.first_name);
+  printf("\tEnter your last name: \n");
+  scanf("%s", newuser.last_name);
+
+  User[userCount++] = newuser;
+  printf("Account created successfully. Welcome to MatchUP!\n");
 }
