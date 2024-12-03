@@ -101,7 +101,7 @@ void displaytitle(void) {
     printf("\n");
 }
 
-int checkUser(User users[], char* username, char* email) {
+int checkUser(User users[], char* username, char* email) { //error
   for (int i = 0; i < MAX_USERS; i++) {
       if (strcmp(users[i].username, username) == 0) {
           return 1;
@@ -113,7 +113,7 @@ int checkUser(User users[], char* username, char* email) {
       }
   }
 
-void createAccount(userCount) {
+void createAccount(userCount) { //error
   User newuser;
   int check;
 
