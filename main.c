@@ -101,13 +101,12 @@ void displaytitle(void) {
     printf("\n");
 }
 
-int checkUser(char* username, char* email) {
-  int search = 50; 
+int checkUser(User users[], char* username, char* email) {
   for (int i = 0; i < MAX_USERS; i++) {
-      if (newuser.username == search ) {
+      if (strcmp(users[i].username, username) == 0) {
           return 1;
       }
-      if (newuser.email == search) {
+      if (strcmp(users[i].email, email) == 0) {
           return 2;
       }
       return 0; 
@@ -125,8 +124,7 @@ void createAccount(userCount) {
 
   printf("\tEnter your username: \n");
   scanf("%s", newuser.username);
-
-  check = checkUser(newuser.username, NULL);
+  check = checkUser(userCount, newuser.username, NULL);
   if (check == 1) {
       printf("This username already exists. Please log in with your username and password or try a different username.\n");
       return;
@@ -137,7 +135,7 @@ void createAccount(userCount) {
 
   printf("\tEnter your email address: \n");
   scanf("%s", newuser.email);
-  check = checkUser(NULL, newuser.email);
+  check = checkUser(userCount,NULL, newuser.email);
   if (check == 2) {
     printf("There is an account already associated with this email. Please use your username and password to login or use a different email.\n");
     return; 
@@ -148,6 +146,6 @@ void createAccount(userCount) {
   printf("\tEnter your last name: \n");
   scanf("%s", newuser.last_name);
 
-  User[userCount++] = newuser;
+
   printf("Account created successfully. Welcome to MatchUP!\n");
 }
