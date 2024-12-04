@@ -95,7 +95,7 @@ void displaytitle(void) {
         printf(" ██║ ╚═╝ ██║██║  ██║   ██║   ╚██████╗██║  ██║╚██████╔╝██║     \n");
         printf(" ╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝     \n");
         printf("\n");
-    printf("\t*          A fun way to meet new friends and play video games          *\n");
+    printf("\t         A fun way to meet new friends and play video games          \n");
     printf("\n");
     printf("\n");
     printf("\tSelect login or sign up to Begin:");
