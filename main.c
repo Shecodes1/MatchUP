@@ -38,6 +38,12 @@ typedef struct {
         char friendRequests[MAX_REQUESTS][MAX_LENGTH];
     } User;
 
+typedef struct {
+    char sender[MAX_LENGTH];
+    char receiver[MAX_LENGTH];
+    char message[MAX_LENGTH];
+} Message;
+
 
 //function prototypes
     void displayTitle(void);
@@ -122,6 +128,85 @@ const char *region = "NA";
 
 // End of API functions and variables
 
+// Function prototypes
+void displayTitle(void);
+void createAccount(User users[], int *userCount);
+void login(User users[], int userCount);
+void initializeFakeAccounts(User users[], int *userCount);
+int checkUser(User users[], char *username, char *email);
+void customizeProfile(User *user);
+void optionsMenu(User *user, User users[], int userCount);
+void friendsMenu(User *user, User users[], int userCount);
+void profileMenu(User *user, User users[], int userCount);
+void displayFriends(User *user);
+void addFriend(User *user, User users[], int userCount);
+void handleFriendRequests(User *user);
+void matchWithFriend(User *user, User users[], int userCount);
+void sendMessage(User *user, Message messages[], int *messageCount);
+
+// Function to match with a friend
+void matchWithFriend(User *user, User users[], int userCount) {
+    printf("\n--- Match with a Friend ---\n");
+
+    for (int i = 0; i < userCount; i++) {
+        if (strcmp(users[i].username, user->username) != 0) {
+            // Matching logic based on favorite games
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    if (strcmp(user->profile.favorite_games[j], users[i].profile.favorite_games[k]) == 0) {
+                        printf("You matched with %s!\n", users[i].username);
+                        printf("Would you like to send a friend request to %s? (y/n): ", users[i].username);
+                        char response;
+                        scanf(" %c", &response);
+
+                        if (response == 'y' || response == 'Y') {
+                            strcpy(user->friendRequests[user->friendRequestsCount++], users[i].username);
+                            printf("Friend request sent to %s!\n", users[i].username);
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    printf("No matches found at the moment.\n");
+Message newMessage;
+    strcpy(newMessage.sender, user->username);
+    strcpy(newMessage.receiver, receiver);
+    strcpy(newMessage.message, message);
+
+    messages[*messageCount] = newMessage;
+    (*messageCount)++;
+
+    printf("Message sent to %s!\n", receiver);
+}
+// Function to send messages
+void sendMessage(User *user, Message messages[], int *messageCount) {
+    char receiver[MAX_LENGTH];
+    char message[MAX_LENGTH];
+
+    printf("\n--- Send a Message ---\n");
+    printf("Enter the username of the friend you want to message: ");
+    scanf(" %s", receiver);
+
+    int isFriend = 0;
+    for (int i = 0; i < user->friendCount; i++) {
+        if (strcmp(user->friends[i], receiver) == 0) {
+            isFriend = 1;
+            break;
+        }
+    }
+
+    if (!isFriend) {
+        printf("You can only message friends.\n");
+        return;
+    }
+
+    printf("Enter your message: ");
+    getchar(); // Clear newline from buffer
+    fgets(message, MAX_LENGTH, stdin);
+    message[strcspn(message, "\n")] = 0; // Remove newline character
 int main() {
   //locally scope variables 
   User users[MAX_USERS];
