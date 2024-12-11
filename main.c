@@ -89,16 +89,16 @@ typedef struct {
 
 // API functions and variables
 
-int createUser(char username, char password, char firstname, char lastname, char email); // User creation
+int createUser(char *username, char *password, char *firstname, char *lastname, char *email); // User creation
 
 size_t write_callback(void *ptr, size_t size, size_t nmemb, char *data); // Assisting function to user and profile reading
 void extract_values_user(const char *response_data); // Assisting function to user reading
-int readUser(char username); // User reading
+int readUser(char *username); // User reading
 
-int createProfile(char username, char favoritegame, char gamertag, char platform, char region); // Profile creation
+int createProfile(); // Profile creation
 
 void extract_values_profile(const char *response_data); // Assisting function to user reading
-int readProfile(char username); // Profile reading
+int readProfile(char *username); // Profile reading
 
 // Variables to store response values from user read
 char response_username_val[256] = {0};
@@ -108,23 +108,42 @@ char response_lastname_val[256] = {0};
 char response_email_val[256] = {0};
 
 // Variables to store response values from profile read
-char response_favoritegame_val[256] = {0};
-char response_gamertag_val[256] = {0};
-char response_platform_val[256] = {0};
+char response_favoritegame1_val[256] = {0};
+char response_favoritegame2_val[256] = {0};
+char response_favoritegame3_val[256] = {0};
+char response_genre1_val[256] = {0};
+char response_genre2_val[256] = {0};
+char response_genre3_val[256] = {0};
+char response_gamertag1_val[256] = {0};
+char response_gamertag2_val[256] = {0};
+char response_gamertag3_val[256] = {0};
+char response_platform1_val[256] = {0};
+char response_platform2_val[256] = {0};
+char response_platform3_val[256] = {0};
 char response_region_val[256] = {0};
 
 // Variables for user creation with example inputs
-const char *username = "tester24";
-const char *password = "password";
-const char *firstname = "tester";
-const char *lastname = "testington";
-const char *email = "email@testing";
+char *username = "tester24";
+char *password = "password";
+char *firstname = "tester";
+char *lastname = "testington";
+char *email = "email@testing";
 
 // Variables for profile creation
-const char *favoritegame = "favoritegame";
-const char *gamertag = "besttester";
-const char *platform = "PC";
-const char *region = "NA";
+char *pronouns = "yes";
+char *favoritegame1 = "favoritegame1";
+char *favoritegame2 = "favoritegame2";
+char *favoritegame3 = "favoritegame3";
+char *genre1 = "genre1";
+char *genre2 = "genre2";
+char *genre3 = "genre3";
+char *gamertag1 = "besttester1";
+char *gamertag2 = "besttester2";
+char *gamertag3 = "besttester3";
+char *platform1 = "PC1";
+char *platform2 = "PC2";
+char *platform3 = "PC3";
+char *region = "NA";
 
 // End of API functions and variables
 
@@ -758,7 +777,7 @@ void profileMenu(User *user, User users[], int userCount) {
 
 
 // API functions:
-int createUser(char username, char password, char firstname, char lastname, char email) { // This function is to create a user using the inputs of username, password, firstname, lastname, and email
+int createUser(char *username, char *password, char *firstname, char *lastname, char *email) { // This function is to create a user using the inputs of username, password, firstname, lastname, and email
     CURL *curl;
     CURLcode res;
 
@@ -766,7 +785,7 @@ int createUser(char username, char password, char firstname, char lastname, char
 
     // Create the JSON data to be sent with the username
     snprintf(json_data, sizeof(json_data),
-             "{\"operation\": \"create\", \"payload\": {\"Item\": {\"username\": \"%d\", \"password\": \"%d\", \"firstname\": \"%d\", \"lastname\": \"%d\", \"email\": \"%d\"}}}",
+             "{\"operation\": \"create\", \"payload\": {\"Item\": {\"username\": \"%s\", \"password\": \"%s\", \"firstname\": \"%s\", \"lastname\": \"%s\", \"email\": \"%s\"}}}",
              username, password, firstname, lastname, email);
 
   
@@ -803,7 +822,7 @@ int createUser(char username, char password, char firstname, char lastname, char
     return 0;
 }
 
-int readUser(char username) { // This function takes in a username input and stores the  assoicated username, password, firstname, lastname, and email in the associated response variables
+int readUser(char *username) { // This function takes in a username input and stores the  assoicated username, password, firstname, lastname, and email in the associated response variables
     CURL *curl;
     CURLcode res;
 
@@ -812,7 +831,7 @@ int readUser(char username) { // This function takes in a username input and sto
 
     // Create the JSON data to be sent with the username
     snprintf(json_data, sizeof(json_data),
-            "{\"operation\": \"read\", \"payload\": {\"Key\": {\"username\": \"%d\"}}}",
+            "{\"operation\": \"read\", \"payload\": {\"Key\": {\"username\": \"%s\"}}}",
             username);
                 
     // Allocate memory for the response data
@@ -886,6 +905,8 @@ void extract_values_user(const char *response_data) {
     cJSON_ArrayForEach(current_item, item) {
         const char *key = current_item->string;  // The key of the current item
         
+        // Dirty if-else chain since switch wasn't working
+        
         if (strcmp(key, "username") == 0 && cJSON_IsString(current_item)) { // Extract username
             strcpy(response_username_val, current_item->valuestring);
         } else if (strcmp(key, "password") == 0 && cJSON_IsString(current_item)) { // Extract password
@@ -910,16 +931,16 @@ void extract_values_user(const char *response_data) {
     cJSON_Delete(root); // Clean up data
 }
 
-int createProfile(char username, char favoritegame, char gamertag, char platform, char region) {
+createProfile() {
     CURL *curl;
     CURLcode res;
 
-    char json_data[1024]; // Allocate memory for the JSON string (enough to hold the entire structure)
+    char json_data[2048]; // Allocate memory for the JSON string (enough to hold the entire structure)
 
     // Create the JSON data to be sent with the username
     snprintf(json_data, sizeof(json_data),
-             "{\"operation\": \"create\", \"payload\": {\"Item\": {\"username\": \"%d\", \"favoritegame\": \"%d\", \"gamertag\": \"%d\", \"platform\": \"%d\", \"region\": \"%d\"}}}",
-             username, favoritegame, gamertag, platform, region);
+             "{\"operation\": \"create\", \"payload\": {\"Item\": {\"username\": \"%s\", \"pronouns\": \"%s\", \"favoritegame1\": \"%s\", \"favoritegame2\": \"%s\", \"favoritegame3\": \"%s\", \"genre1\": \"%s\", \"genre2\": \"%s\", \"genre3\": \"%s\", \"gamertag1\": \"%s\", \"gamertag2\": \"%s\", \"gamertag3\": \"%s\", \"platform1\": \"%s\", \"platform2\": \"%s\", \"platform3\": \"%s\", \"region\": \"%s\"}}}",
+             username, pronouns, favoritegame1, favoritegame2, favoritegame3, genre1, genre2, genre3, gamertag1, gamertag2, gamertag3, platform1, platform2, platform3, region);
 
   
     curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -955,7 +976,7 @@ int createProfile(char username, char favoritegame, char gamertag, char platform
     return 0;
 }
 
-int readProfile(char username) { // This function takes in a username input and stores the assoicated username, favoritegame, gamertag, platform, and region in the associated response variables
+int readProfile(char *username) { // This function takes in a username input and stores the assoicated username, favoritegame, gamertag, platform, and region in the associated response variables
     CURL *curl;
     CURLcode res;
     
@@ -963,11 +984,11 @@ int readProfile(char username) { // This function takes in a username input and 
 
     // Create the JSON data to be sent with the username
     snprintf(json_data, sizeof(json_data),
-            "{\"operation\": \"read\", \"payload\": {\"Key\": {\"username\": \"%d\"}}}",
+            "{\"operation\": \"read\", \"payload\": {\"Key\": {\"username\": \"%s\"}}}",
             username);
                 
     // Allocate memory for the response data
-    char response_data[2048] = {0}; // Make the buffer empty by default
+    char response_data[4096] = {0}; // Make the buffer empty by default
 
     
     curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -1031,14 +1052,36 @@ void extract_values_profile(const char *response_data) {
     cJSON_ArrayForEach(current_item, item) {
         const char *key = current_item->string;  // The key of the current item
         
+        // Nasty if-else chain since switch wasn't working
+        
         if (strcmp(key, "username") == 0 && cJSON_IsString(current_item)) { // Extract username
             strcpy(response_username_val, current_item->valuestring);
-        } else if (strcmp(key, "favoritegame") == 0 && cJSON_IsString(current_item)) { // Extract favoritegame
-            strcpy(response_favoritegame_val, current_item->valuestring);
-        } else if (strcmp(key, "gamertag") == 0 && cJSON_IsString(current_item)) { // Extract first name
-            strcpy(response_gamertag_val, current_item->valuestring);
-        } else if (strcmp(key, "platform") == 0 && cJSON_IsString(current_item)) { // Extract last name
-            strcpy(response_platform_val, current_item->valuestring);
+        } else if (strcmp(key, "pronouns") == 0 && cJSON_IsString(current_item)) { // Extract pronouns
+            strcpy(response_pronouns_val, current_item->valuestring);
+        } else if (strcmp(key, "favoritegame1") == 0 && cJSON_IsString(current_item)) { // Extract favoritegame1
+            strcpy(response_favoritegame1_val, current_item->valuestring);
+        } else if (strcmp(key, "favoritegame2") == 0 && cJSON_IsString(current_item)) { // Extract favoritegame2
+            strcpy(response_favoritegame2_val, current_item->valuestring);
+        } else if (strcmp(key, "favoritegame3") == 0 && cJSON_IsString(current_item)) { // Extract favoritegame3
+            strcpy(response_favoritegame3_val, current_item->valuestring);
+        } else if (strcmp(key, "genre1") == 0 && cJSON_IsString(current_item)) { // Extract genre1
+            strcpy(response_genre1_val, current_item->valuestring);
+        } else if (strcmp(key, "genre2") == 0 && cJSON_IsString(current_item)) { // Extract genre2
+            strcpy(response_genre2_val, current_item->valuestring);
+        } else if (strcmp(key, "genre3") == 0 && cJSON_IsString(current_item)) { // Extract genre3
+            strcpy(response_genre3_val, current_item->valuestring);
+        } else if (strcmp(key, "gamertag1") == 0 && cJSON_IsString(current_item)) { // Extract gamertag1
+            strcpy(response_gamertag1_val, current_item->valuestring);
+        } else if (strcmp(key, "gamertag2") == 0 && cJSON_IsString(current_item)) { // Extract gamertag2
+            strcpy(response_gamertag2_val, current_item->valuestring);
+        } else if (strcmp(key, "gamertag3") == 0 && cJSON_IsString(current_item)) { // Extract gamertag3
+            strcpy(response_gamertag3_val, current_item->valuestring);
+        } else if (strcmp(key, "platform1") == 0 && cJSON_IsString(current_item)) { // Extract platform1
+            strcpy(response_platform1_val, current_item->valuestring);
+        } else if (strcmp(key, "platform2") == 0 && cJSON_IsString(current_item)) { // Extract platform2
+            strcpy(response_platform2_val, current_item->valuestring);
+        } else if (strcmp(key, "platform3") == 0 && cJSON_IsString(current_item)) { // Extract platform3
+            strcpy(response_platform3_val, current_item->valuestring);
         } else if (strcmp(key, "region") == 0 && cJSON_IsString(current_item)) { // Extract region
             strcpy(response_region_val, current_item->valuestring);
         }
@@ -1046,9 +1089,19 @@ void extract_values_profile(const char *response_data) {
 
     /* Print values of response for error checking
     printf("username: %s\n", response_username_val[0] != '\0' ? response_username_val : "Not available");
-    printf("favoritegame: %s\n", response_favoritegame_val[0] != '\0' ? response_favoritegame_val : "Not available");
-    printf("gamertag: %s\n", response_gamertag_val[0] != '\0' ? response_gamertag_val : "Not available");
-    printf("platform: %s\n", response_platform_val[0] != '\0' ? response_platform_val : "Not available");
+    printf("pronouns: %s\n", response_pronouns_val[0] != '\0' ? response_pronouns_val : "Not available");
+    printf("favoritegame1: %s\n", response_favoritegame1_val[0] != '\0' ? response_favoritegame1_val : "Not available");
+    printf("favoritegame2: %s\n", response_favoritegame2_val[0] != '\0' ? response_favoritegame2_val : "Not available");
+    printf("favoritegame3: %s\n", response_favoritegame3_val[0] != '\0' ? response_favoritegame3_val : "Not available");
+    printf("genre1: %s\n", response_genre1_val[0] != '\0' ? response_genre1_val : "Not available");
+    printf("genre2: %s\n", response_genre2_val[0] != '\0' ? response_genre2_val : "Not available");
+    printf("genre3: %s\n", response_genre3_val[0] != '\0' ? response_genre3_val : "Not available");
+    printf("gamertag1: %s\n", response_gamertag1_val[0] != '\0' ? response_gamertag3_val : "Not available");
+    printf("gamertag2: %s\n", response_gamertag2_val[0] != '\0' ? response_gamertag2_val : "Not available");
+    printf("gamertag3: %s\n", response_gamertag3_val[0] != '\0' ? response_gamertag1_val : "Not available");
+    printf("platform1: %s\n", response_platform1_val[0] != '\0' ? response_platform1_val : "Not available");
+    printf("platform2: %s\n", response_platform2_val[0] != '\0' ? response_platform2_val : "Not available");
+    printf("platform3: %s\n", response_platform3_val[0] != '\0' ? response_platform3_val : "Not available");
     printf("region: %s\n", response_region_val[0] != '\0' ? response_region_val : "Not available");
     */
     
