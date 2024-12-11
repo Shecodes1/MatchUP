@@ -48,10 +48,10 @@ typedef struct {
 //function prototypes
     void displayTitle(void);
     void createAccount(User users[], int *userCount);
-    void login(User users[], int userCount);
+    int login (User users[], int *userCount);
     void initializeFakeAccounts(User users[], int *userCount);
     int checkUser(User users[], char *username, char *email);
-    void customizeProfile(User *user);
+    void customizeProfile(User *user, User users[], int *userCount);
     void optionsMenu(User *user, User users[], int userCount);
     void friendsMenu(User *user, User users[], int userCount);
     void profileMenu(User *user, User users[], int userCount);
@@ -108,6 +108,7 @@ char response_lastname_val[256] = {0};
 char response_email_val[256] = {0};
 
 // Variables to store response values from profile read
+char response_pronouns_val[256] = {0};
 char response_favoritegame1_val[256] = {0};
 char response_favoritegame2_val[256] = {0};
 char response_favoritegame3_val[256] = {0};
@@ -116,54 +117,55 @@ char response_genre2_val[256] = {0};
 char response_genre3_val[256] = {0};
 char response_gamertag1_val[256] = {0};
 char response_gamertag2_val[256] = {0};
-char response_gamertag3_val[256] = {0};
 char response_platform1_val[256] = {0};
 char response_platform2_val[256] = {0};
 char response_platform3_val[256] = {0};
 char response_region_val[256] = {0};
 
 // Variables for user creation with example inputs
-char *username = "tester24";
-char *password = "password";
-char *firstname = "tester";
-char *lastname = "testington";
-char *email = "email@testing";
+char username[MAX_LENGTH];
+char password[MAX_LENGTH];
+char firstname[MAX_LENGTH];
+char lastname[MAX_LENGTH];
+char email[MAX_LENGTH];
 
 // Variables for profile creation
-char *pronouns = "yes";
-char *favoritegame1 = "favoritegame1";
-char *favoritegame2 = "favoritegame2";
-char *favoritegame3 = "favoritegame3";
-char *genre1 = "genre1";
-char *genre2 = "genre2";
-char *genre3 = "genre3";
-char *gamertag1 = "besttester1";
-char *gamertag2 = "besttester2";
-char *gamertag3 = "besttester3";
-char *platform1 = "PC1";
-char *platform2 = "PC2";
-char *platform3 = "PC3";
-char *region = "NA";
+char pronouns[MAX_LENGTH];
+char favoritegame1[MAX_LENGTH];
+char favoritegame2[MAX_LENGTH];
+char favoritegame3[MAX_LENGTH];
+char genre1[MAX_LENGTH];
+char genre2[MAX_LENGTH];
+char genre3[MAX_LENGTH];
+char gamertag1[MAX_LENGTH];
+char gamertag2[MAX_LENGTH];
+char platform1[MAX_LENGTH];
+char platform2[MAX_LENGTH];
+char platform3[MAX_LENGTH];
+char region[MAX_LENGTH];
+
+// Variable to see if user is logged in or not
+int logged_in = 0;
 
 // End of API functions and variables
 
 // Function prototypes
 void displayTitle(void);
 void createAccount(User users[], int *userCount);
-void login(User users[], int userCount);
 void initializeFakeAccounts(User users[], int *userCount);
 int checkUser(User users[], char *username, char *email);
-void customizeProfile(User *user);
+void customizeProfile(User *user, User users[], int *userCount);
 void optionsMenu(User *user, User users[], int userCount);
 void friendsMenu(User *user, User users[], int userCount);
 void profileMenu(User *user, User users[], int userCount);
 void displayFriends(User *user);
 void addFriend(User *user, User users[], int userCount);
 void handleFriendRequests(User *user);
-void matchWithFriend(User *user, User users[], int userCount);
-void sendMessage(User *user, Message messages[], int *messageCount);
+//void matchWithFriend(User *user, User users[], int userCount);
+//void sendMessage(User *user, Message messages[], int *messageCount);
 
 // Function to match with a friend
+/*
 void matchWithFriend(User *user, User users[], int userCount) {
     printf("\n--- Match with a Friend ---\n");
 
@@ -190,7 +192,7 @@ void matchWithFriend(User *user, User users[], int userCount) {
     }
 
     printf("No matches found at the moment.\n");
-Message newMessage;
+    Message newMessage;
     strcpy(newMessage.sender, user->username);
     strcpy(newMessage.receiver, receiver);
     strcpy(newMessage.message, message);
@@ -199,8 +201,11 @@ Message newMessage;
     (*messageCount)++;
 
     printf("Message sent to %s!\n", receiver);
-}
+ } */
+
+
 // Function to send messages
+/*
 void sendMessage(User *user, Message messages[], int *messageCount) {
     char receiver[MAX_LENGTH];
     char message[MAX_LENGTH];
@@ -226,6 +231,9 @@ void sendMessage(User *user, Message messages[], int *messageCount) {
     getchar(); // Clear newline from buffer
     fgets(message, MAX_LENGTH, stdin);
     message[strcspn(message, "\n")] = 0; // Remove newline character
+  */  
+    
+    
 int main() {
   //locally scope variables 
   User users[MAX_USERS];
@@ -244,7 +252,7 @@ int main() {
                     createAccount(users, &userCount);
                     break;
                 case 2:
-                    login(users, userCount);
+                    login(users, &userCount);
                     break;
                 case 3:
                     printf("Goodbye!\n");
@@ -258,9 +266,25 @@ int main() {
 }
 
 //login options
-void login(users, userCount){
-    printf("Please enter your username: ");
-    printf("Please enter your password: ");
+int login(User users[], int *userCount){
+    	char Log_Usr [50]; 
+	char Log_Pass [50]; 
+	int result;
+	printf("Please enter your username: \n");
+	scanf("%s", Log_Usr); 
+	printf("Please enter your password: \n"); 
+	scanf("%s", Log_Pass);
+	readUser(Log_Usr);
+	result = strcmp(Log_Pass, response_password_val);
+	if (result == 0){ 
+		printf("\nLogging In, %s\n", Log_Usr); 
+		strcpy(username, Log_Usr);
+		logged_in = 1;
+		optionsMenu(&users[*userCount - 1],users, &userCount);
+		return 0;}
+	 else { 
+	 	printf("INCORRECT PASSWORD"); 
+	 	return 1; }
 }
 
 // Function to check if the username or email already exists
@@ -375,13 +399,18 @@ void displayTitle(void) {
 
     users[*userCount] = newUser;
     (*userCount)++;
+    
+    strcpy(username, newUser.username);
+    
+    int success;
+    success = createUser(newUser.username, newUser.password, newUser.first_name, newUser.last_name, newUser.email);
 
     printf("\nAccount created successfully. You must now customize your profile.\n");
-    //customizeProfile(&users[*userCount - 1]); 
+    customizeProfile(&users[*userCount - 1], users, &userCount); 
 }
 
 // Profile Customization
-    void customizeProfile(User *user) {
+    void customizeProfile(User *user, User users[], int *userCount) {
         printf("\nCustomize your profile:\n");
         
         //Enter nickname/display name
@@ -396,6 +425,8 @@ void displayTitle(void) {
         if (user->profile.pronouns[strlen(user->profile.pronouns) - 1] == '\n') {
             user->profile.pronouns[strlen(user->profile.pronouns) - 1] = '\0'; // Remove newline
         }
+        
+        strcpy(pronouns, user->profile.pronouns);
     
         //Enter gamertags (at least 1 required, up to 2)
         printf("- Enter how many gamertags you wish to display (1-2): ");
@@ -414,7 +445,7 @@ void displayTitle(void) {
             
                 //If the first gamertag is empty, prompt again
                 if (strlen(user->profile.gamertags[0]) == 0) {
-                    printf("    At least one gamertag is required.\n");
+                    printf("    At least one gamertag isrequired.\n");
                     printf("    Gamertag 1: ");
                     fgets(user->profile.gamertags[0], MAX_LENGTH, stdin);
                     if (user->profile.gamertags[0][strlen(user->profile.gamertags[0]) - 1] == '\n') {
@@ -439,6 +470,10 @@ void displayTitle(void) {
                     printf("Gamertag 2 is optional and has been skipped.\n");
                 }
             } 
+            
+            
+        strcpy(gamertag1, user->profile.gamertags[0]);
+        strcpy(gamertag2, user->profile.gamertags[1]);
     
         // Enter platforms (up to 3)
         printf("\r- Enter how many platforms you wish to display (1-3): ");
@@ -493,6 +528,11 @@ void displayTitle(void) {
                 // No need to prompt again, simply leave it empty
             }
         }
+        
+        
+        strcpy(platform1, user->profile.platforms[0]);
+        strcpy(platform2, user->profile.platforms[1]);
+        strcpy(platform3, user->profile.platforms[2]);
             
         // Enter favorite games (up to 3)
         printf("\r- Enter how many favorite games you wish to display (1-3): ");
@@ -546,7 +586,11 @@ void displayTitle(void) {
             if (strlen(user->profile.favorite_games[2]) == 0) {
                 // No need to prompt again, simply leave it empty
             }
-        }
+        }  
+        
+        strcpy(favoritegame1, user->profile.favorite_games[0]);
+        strcpy(favoritegame2, user->profile.favorite_games[1]);
+        strcpy(favoritegame3, user->profile.favorite_games[2]);
             
         // Enter game types (up to 3)
         printf("\r- Enter how many types of games you enjoy (1-3): ");
@@ -597,6 +641,11 @@ void displayTitle(void) {
             // If the third game type is empty, allow it to be skipped
             if (strlen(user->profile.game_types[2]) == 0) {}
         }
+        
+        strcpy(genre1, user->profile.game_types[0]);
+        strcpy(genre2, user->profile.game_types[1]);
+        strcpy(genre3, user->profile.game_types[2]);
+            
                 
         // Enter region (optional)
         printf("\r- Enter your region (optional, press enter to skip): ");
@@ -604,10 +653,45 @@ void displayTitle(void) {
         if (user->profile.region[strlen(user->profile.region) - 1] == '\n') {
             user->profile.region[strlen(user->profile.region) - 1] = '\0'; // Remove newline
         }
+        
+        strcpy(region, user->profile.region);
+        
+        if(pronouns[0] == '\0') {
+        	strcpy(pronouns, "No value");
+        }
+        if(favoritegame2[0] == '\0') {
+        	strcpy(favoritegame2, "No value");
+        }
+        if(favoritegame3[0] == '\0') {
+        	strcpy(favoritegame3, "No value");
+        }
+        if(genre2[0] == '\0') {
+        	strcpy(genre2, "No value");
+        }
+        if(genre3[0] == '\0') {
+        	strcpy(genre3, "No value");
+        }
+        if(gamertag2[0] == '\0') {
+        	strcpy(gamertag2, "No value");
+        }
+        if(platform2[0] == '\0') {
+        	strcpy(platform2, "No value");
+        }
+        if(platform3[0] == '\0') {
+        	strcpy(platform3, "No value");
+        }
+        if(region[0] == '\0') {
+        	strcpy(region, "No value");
+        }
+    
+    	int success;
+    	success = createProfile();
     
         printf("Profile setup complete!\n");
+        optionsMenu(user, users, userCount);
     }
-
+    
+    
 // Options Menu
 void optionsMenu(User *user, User users[], int userCount) {
     int choice;
@@ -755,14 +839,23 @@ void profileMenu(User *user, User users[], int userCount) {
 
         switch (choice) {
             case 1:
-                printf("\tUsername: %s\n", user->username);
-                printf("\tNickname: %s\n", user->profile.nickname);
-                printf("\tPronouns: %s\n", user->profile.pronouns);
-                printf("\tRegion: %s\n", user->profile.region);
-                // Add more fields as needed
+            	readProfile(username);
+                printf("Username: %s\n", response_username_val[0] != '\0' ? response_username_val : "Not available");
+                printf("Pronouns: %s\n", response_pronouns_val[0] != '\0' ? response_pronouns_val : "Not entered");
+                printf("Favorite Game 1: %s\n", response_favoritegame1_val[0] != '\0' ? response_favoritegame1_val : "Not entered");
+                printf("Favorite Game 2: %s\n", response_favoritegame2_val[0] != '\0' ? response_favoritegame2_val : "Not entered");
+                printf("Favorite Game 3: %s\n", response_favoritegame3_val[0] != '\0' ? response_favoritegame3_val : "Not entered");
+                printf("Favorite Genre 1: %s\n", response_genre1_val[0] != '\0' ? response_genre1_val : "Not entered");
+                printf("Favorite Genre 2: %s\n", response_genre2_val[0] != '\0' ? response_genre2_val : "Not entered");
+                printf("Favorite Genre 3: %s\n", response_genre3_val[0] != '\0' ? response_genre3_val : "Not entered");
+                printf("Gamertag 2: %s\n", response_gamertag2_val[0] != '\0' ? response_gamertag2_val : "Not entered");
+                printf("Platform 1: %s\n", response_platform1_val[0] != '\0' ? response_platform1_val : "Not entered");
+                printf("Platform 2: %s\n", response_platform2_val[0] != '\0' ? response_platform2_val : "Not entered");
+                printf("Platform 3: %s\n", response_platform3_val[0] != '\0' ? response_platform3_val : "Not entered");
+                printf("Region: %s\n", response_region_val[0] != '\0' ? response_region_val : "Not entered");
                 break;
             case 2:
-                customizeProfile(user);
+                customizeProfile(user, users, userCount);
                 break;
             case 3:
                 printf("\tAccount deletion is not implemented yet.\n");
@@ -931,16 +1024,16 @@ void extract_values_user(const char *response_data) {
     cJSON_Delete(root); // Clean up data
 }
 
-createProfile() {
+int createProfile() {
     CURL *curl;
     CURLcode res;
 
-    char json_data[2048]; // Allocate memory for the JSON string (enough to hold the entire structure)
+    char json_data[8192]; // Allocate memory for the JSON string (enough to hold the entire structure)
 
     // Create the JSON data to be sent with the username
     snprintf(json_data, sizeof(json_data),
-             "{\"operation\": \"create\", \"payload\": {\"Item\": {\"username\": \"%s\", \"pronouns\": \"%s\", \"favoritegame1\": \"%s\", \"favoritegame2\": \"%s\", \"favoritegame3\": \"%s\", \"genre1\": \"%s\", \"genre2\": \"%s\", \"genre3\": \"%s\", \"gamertag1\": \"%s\", \"gamertag2\": \"%s\", \"gamertag3\": \"%s\", \"platform1\": \"%s\", \"platform2\": \"%s\", \"platform3\": \"%s\", \"region\": \"%s\"}}}",
-             username, pronouns, favoritegame1, favoritegame2, favoritegame3, genre1, genre2, genre3, gamertag1, gamertag2, gamertag3, platform1, platform2, platform3, region);
+             "{\"operation\": \"create\", \"payload\": {\"Item\": {\"username\": \"%s\", \"pronouns\": \"%s\", \"favoritegame1\": \"%s\", \"favoritegame2\": \"%s\", \"favoritegame3\": \"%s\", \"genre1\": \"%s\", \"genre2\": \"%s\", \"genre3\": \"%s\", \"gamertag1\": \"%s\", \"gamertag2\": \"%s\", \"platform1\": \"%s\", \"platform2\": \"%s\", \"platform3\": \"%s\", \"region\": \"%s\"}}}",
+             username, pronouns, favoritegame1, favoritegame2, favoritegame3, genre1, genre2, genre3, gamertag1, gamertag2, platform1, platform2, platform3, region);
 
   
     curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -980,15 +1073,17 @@ int readProfile(char *username) { // This function takes in a username input and
     CURL *curl;
     CURLcode res;
     
-    char json_data[1024]; // Allocate memory for the JSON string (enough to hold the entire structure)
+    char json_data[8192]; // Allocate memory for the JSON string (enough to hold the entire structure)
 
     // Create the JSON data to be sent with the username
     snprintf(json_data, sizeof(json_data),
             "{\"operation\": \"read\", \"payload\": {\"Key\": {\"username\": \"%s\"}}}",
             username);
+    
+    printf("\n%s\n" ,json_data);
                 
     // Allocate memory for the response data
-    char response_data[4096] = {0}; // Make the buffer empty by default
+    char response_data[8192] = {0}; // Make the buffer empty by default
 
     
     curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -1074,8 +1169,6 @@ void extract_values_profile(const char *response_data) {
             strcpy(response_gamertag1_val, current_item->valuestring);
         } else if (strcmp(key, "gamertag2") == 0 && cJSON_IsString(current_item)) { // Extract gamertag2
             strcpy(response_gamertag2_val, current_item->valuestring);
-        } else if (strcmp(key, "gamertag3") == 0 && cJSON_IsString(current_item)) { // Extract gamertag3
-            strcpy(response_gamertag3_val, current_item->valuestring);
         } else if (strcmp(key, "platform1") == 0 && cJSON_IsString(current_item)) { // Extract platform1
             strcpy(response_platform1_val, current_item->valuestring);
         } else if (strcmp(key, "platform2") == 0 && cJSON_IsString(current_item)) { // Extract platform2
@@ -1098,7 +1191,6 @@ void extract_values_profile(const char *response_data) {
     printf("genre3: %s\n", response_genre3_val[0] != '\0' ? response_genre3_val : "Not available");
     printf("gamertag1: %s\n", response_gamertag1_val[0] != '\0' ? response_gamertag3_val : "Not available");
     printf("gamertag2: %s\n", response_gamertag2_val[0] != '\0' ? response_gamertag2_val : "Not available");
-    printf("gamertag3: %s\n", response_gamertag3_val[0] != '\0' ? response_gamertag1_val : "Not available");
     printf("platform1: %s\n", response_platform1_val[0] != '\0' ? response_platform1_val : "Not available");
     printf("platform2: %s\n", response_platform2_val[0] != '\0' ? response_platform2_val : "Not available");
     printf("platform3: %s\n", response_platform3_val[0] != '\0' ? response_platform3_val : "Not available");
