@@ -153,6 +153,12 @@ int main() {
         return 0;
 }
 
+//login options
+void login(users, userCount){
+    printf("Please enter your username: ");
+    printf("Please enter your password: ");
+}
+
 // Function to check if the username or email already exists
     int checkUser(User users[], char *username, char *email) {
         for (int i = 0; i < MAX_USERS; i++) {
