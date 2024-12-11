@@ -25,7 +25,7 @@ typedef struct {
         char game_types[3][MAX_LENGTH];
     } Profile;
     
-    typedef struct {
+typedef struct {
         char username[MAX_LENGTH];
         char password[MAX_LENGTH];
         char email[MAX_LENGTH];
@@ -140,7 +140,7 @@ int main() {
                     createAccount(users, &userCount);
                     break;
                 case 2:
-                      login(users, userCount);
+                    login(users, userCount);
                     break;
                 case 3:
                     printf("Goodbye!\n");
@@ -166,16 +166,16 @@ int main() {
         return 0; //no conflict
     }
 
-void displaytitle(void) {
+void displayTitle(void) {
     printf("\n");
-        printf(" ███╗   ███╗ █████╗ ████████╗ ██████╗██╗  ██╗██╗   ██╗██████╗ \n");
-        printf(" ████╗ ████║██╔══██╗╚══██╔══╝██╔════╝██║  ██║██║   ██║██╔══██╗\n");
-        printf(" ██╔████╔██║███████║   ██║   ██║     ███████║██║   ██║██████╔╝\n");
-        printf(" ██║╚██╔╝██║██╔══██║   ██║   ██║     ██╔══██║██║   ██║██╔═══╝ \n");
-        printf(" ██║ ╚═╝ ██║██║  ██║   ██║   ╚██████╗██║  ██║╚██████╔╝██║     \n");
-        printf(" ╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝     \n");
-        printf("\n");
-    printf("\t         A fun way to meet new friends and play video games          \n");
+    printf(" ███╗   ███╗ █████╗ ████████╗ ██████╗██╗  ██╗██╗   ██╗██████╗ \n");
+    printf(" ████╗ ████║██╔══██╗╚══██╔══╝██╔════╝██║  ██║██║   ██║██╔══██╗\n");
+    printf(" ██╔████╔██║███████║   ██║   ██║     ███████║██║   ██║██████╔╝\n");
+    printf(" ██║╚██╔╝██║██╔══██║   ██║   ██║     ██╔══██║██║   ██║██╔═══╝ \n");
+    printf(" ██║ ╚═╝ ██║██║  ██║   ██║   ╚██████╗██║  ██║╚██████╔╝██║     \n");
+    printf(" ╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝     \n");
+    printf("\n");
+    printf("\t   A fun way to meet new friends and play video games       \n");
     printf("\n");
     printf("\n");
     printf("\tSelect login or sign up to Begin:");
@@ -675,7 +675,7 @@ int createUser(char username, char password, char firstname, char lastname, char
 
     // Create the JSON data to be sent with the username
     snprintf(json_data, sizeof(json_data),
-             "{\"operation\": \"create\", \"payload\": {\"Item\": {\"username\": \"%s\", \"password\": \"%s\", \"firstname\": \"%s\", \"lastname\": \"%s\", \"email\": \"%s\"}}}",
+             "{\"operation\": \"create\", \"payload\": {\"Item\": {\"username\": \"%d\", \"password\": \"%d\", \"firstname\": \"%d\", \"lastname\": \"%d\", \"email\": \"%d\"}}}",
              username, password, firstname, lastname, email);
 
   
@@ -721,7 +721,7 @@ int readUser(char username) { // This function takes in a username input and sto
 
     // Create the JSON data to be sent with the username
     snprintf(json_data, sizeof(json_data),
-            "{\"operation\": \"read\", \"payload\": {\"Key\": {\"username\": \"%s\"}}}",
+            "{\"operation\": \"read\", \"payload\": {\"Key\": {\"username\": \"%d\"}}}",
             username);
                 
     // Allocate memory for the response data
@@ -827,7 +827,7 @@ int createProfile(char username, char favoritegame, char gamertag, char platform
 
     // Create the JSON data to be sent with the username
     snprintf(json_data, sizeof(json_data),
-             "{\"operation\": \"create\", \"payload\": {\"Item\": {\"username\": \"%s\", \"favoritegame\": \"%s\", \"gamertag\": \"%s\", \"platform\": \"%s\", \"region\": \"%s\"}}}",
+             "{\"operation\": \"create\", \"payload\": {\"Item\": {\"username\": \"%d\", \"favoritegame\": \"%d\", \"gamertag\": \"%d\", \"platform\": \"%d\", \"region\": \"%d\"}}}",
              username, favoritegame, gamertag, platform, region);
 
   
@@ -872,7 +872,7 @@ int readProfile(char username) { // This function takes in a username input and 
 
     // Create the JSON data to be sent with the username
     snprintf(json_data, sizeof(json_data),
-            "{\"operation\": \"read\", \"payload\": {\"Key\": {\"username\": \"%s\"}}}",
+            "{\"operation\": \"read\", \"payload\": {\"Key\": {\"username\": \"%d\"}}}",
             username);
                 
     // Allocate memory for the response data
