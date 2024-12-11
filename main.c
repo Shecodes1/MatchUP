@@ -257,10 +257,30 @@ int main() {
         return 0;
 }
 
-//login options
-void login(users, userCount){
-    printf("Please enter your username: ");
-    printf("Please enter your password: ");
+   //login options
+    login(User user[],int userCount){
+    char Log_Usr [50];
+    char Log_Pass [50];
+    int result; 
+    
+    printf("Please enter your username: \n");
+    scanf("%s", Log_Usr);
+    printf("Please enter your password: \n");
+    scanf("%s", Log_Pass);
+    
+    readUser(Log_Usr);
+    
+    result = strcmp(Log_Pass, response_password_val);
+    
+    if (result == 0){
+    printf("Logging In");
+    return 0;}
+    else {
+    printf("INCORRECT PASSWORD");
+    return 1;
+    }
+    
+    
 }
 
 // Function to check if the username or email already exists
